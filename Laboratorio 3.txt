@@ -1,0 +1,44 @@
+#include <LiquidCrystal.h>
+
+const int led = 13; 
+const int motor = 10;
+const int sensor = A0;
+
+int segundos = 0;
+float temperatura = 0.0;
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+void setup() {
+  lcd.begin(16, 2);
+  lcd.print("Temperatura: ");
+  pinMode(led, OUTPUT);
+  pinMode(motor, OUTPUT);
+}
+
+void loop() {
+  int lecturaTemperatura = analogRead(sensor);
+  temperatura = (lecturaTemperatura * 5.0 * 100.0) / 1024.0;
+
+  if (temperatura <= 10.0) {
+    digitalWrite(led, HIGH); 
+    digitalWrite(motor, LOW); 
+    delay(500);
+    digitalWrite(led, LOW); 
+    delay(500); 
+  } else if (temperatura >= 11.0 && temperatura <= 25.0) {
+    digitalWrite(led, LOW); 
+    digitalWrite(motor, LOW); 
+  } else if (temperatura > 25.0){
+    digitalWrite(led, HIGH); 
+    digitalWrite(motor, HIGH); 
+  }
+
+  lcd.setCursor(6, 0); 
+  lcd.print(temperatura); 
+  lcd.print(" C"); 
+  lcd.setCursor(0, 1); 
+  lcd.print("Segundos: ");
+  lcd.print(segundos);
+  delay(1000);
+  segundos += 1; 
+}
